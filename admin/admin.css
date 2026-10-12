@@ -1,7 +1,7 @@
 /* Golf de Marcilly — espace d'administration */
 :root {
-  --navy: #253C57; --navy-deep: #15253A; --red: #BA2F2F; --green: #3E7D4A; --green-light: #CFE3C9;
-  --sky: #DDE8EB; --sand: #EDE4CF; --paper: #F5F7F8; --ink: #18273A; --muted: #5B6B7D; --line: #DCE3E8;
+  --navy: #253C57; --navy-deep: #15253A; --red: #2470C4; --green: #3B6E9E; --green-light: #CFE2F3;
+  --sky: #DDE8EB; --sand: #E8EFF6; --paper: #F5F7F8; --ink: #18273A; --muted: #5B6B7D; --line: #DCE3E8;
   --font: 'Archivo', system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
@@ -52,12 +52,12 @@ h1, h2, h3 { font-variation-settings: 'wdth' 120; font-weight: 800; line-height:
 .btn { display: inline-flex; align-items: center; gap: .45rem; border: 2px solid var(--navy); background: var(--navy); color: #fff; padding: .55rem 1rem; border-radius: 999px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: .9rem; line-height: 1.2; white-space: nowrap; }
 .btn:hover { background: var(--navy-deep); border-color: var(--navy-deep); }
 .btn--red { background: var(--red); border-color: var(--red); }
-.btn--red:hover { background: #962222; border-color: #962222; }
+.btn--red:hover { background: #1B5AA0; border-color: #1B5AA0; }
 .btn--ghost { background: transparent; color: var(--navy); }
 .btn--ghost:hover { background: var(--sky); }
 .btn--sm { padding: .3rem .7rem; font-size: .82rem; }
 .btn--danger { background: transparent; color: var(--red); border-color: transparent; }
-.btn--danger:hover { background: #F6DADA; border-color: #F6DADA; }
+.btn--danger:hover { background: #DCE9F7; border-color: #DCE9F7; }
 .btn:disabled { opacity: .5; cursor: wait; }
 .row { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
 .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 1.3rem; }
@@ -95,7 +95,7 @@ textarea.md { min-height: 220px; font-family: ui-monospace, SFMono-Regular, Menl
 .pill { display: inline-block; font-size: .72rem; font-weight: 700; padding: .12rem .5rem; border-radius: 999px; background: var(--sky); color: var(--navy); margin-left: .4rem; vertical-align: middle; }
 .pill--off { background: #eee; color: #777; }
 .pill--new { background: var(--red); color: #fff; }
-.pill--ok { background: var(--green-light); color: #24502F; }
+.pill--ok { background: var(--green-light); color: #1D3A5C; }
 .group-title { padding: .6rem 1rem; background: var(--paper); font-weight: 800; font-size: .82rem; color: var(--muted); border-bottom: 1px solid var(--line); }
 .empty { padding: 2.5rem; text-align: center; color: var(--muted); }
 
@@ -124,7 +124,7 @@ textarea.md { min-height: 220px; font-family: ui-monospace, SFMono-Regular, Menl
 .media.is-pick { cursor: pointer; }
 .media.is-pick:hover { outline: 3px solid var(--red); }
 .dropzone { border: 2px dashed var(--line); border-radius: 16px; padding: 1.4rem; text-align: center; color: var(--muted); margin-bottom: 1rem; background: #fff; }
-.dropzone.is-over { border-color: var(--red); background: #FFF7F7; }
+.dropzone.is-over { border-color: var(--red); background: #F2F7FD; }
 
 /* messages */
 .msg { padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); display: grid; gap: .4rem; }
@@ -141,5 +141,5 @@ textarea.md { min-height: 220px; font-family: ui-monospace, SFMono-Regular, Menl
 .confirm .card { max-width: 420px; display: grid; gap: 1rem; }
 .hint { background: var(--sky); border-radius: 12px; padding: .8rem 1rem; font-size: .88rem; color: var(--navy); }
 .status { padding: .7rem 1rem; border-radius: 10px; font-weight: 600; }
-.status.err { background: #F6DADA; color: #962222; }
-.status.ok { background: var(--green-light); color: #24502F; }
+.status.err { background: #DCE9F7; color: #1B5AA0; }
+.status.ok { background: var(--green-light); color: #1D3A5C; }

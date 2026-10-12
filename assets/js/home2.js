@@ -62,7 +62,7 @@
       // vol
       .to(st, { t: 1, duration: .6, ease: 'power1.inOut', onUpdate: function () { place(st.t); } }, .06)
       .to('.tee__shadow', { scale: 0, opacity: 0, duration: .1 }, .06)
-      .to('.tee__peg', { y: '12vh', duration: .2, ease: 'power2.in' }, .1)
+      .to('.tee__peg', { y: '14vh', opacity: 0, duration: .2, ease: 'power2.in' }, .1)
       .to('.tee__ground', { yPercent: 100, duration: .3, ease: 'power2.in' }, .12)
       .to('.tee__big', { scale: 1.6, opacity: 0, duration: .3, ease: 'power2.in' }, .08)
       // la caméra monte : le ciel s'efface, la vue aérienne apparaît
@@ -89,10 +89,13 @@
   function flap(el, text) {
     text = String(text || '').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     el.setAttribute('aria-label', text);
-    el.innerHTML = text.split('').map(function (c) { return c === ' ' ? '<span class="sp" aria-hidden="true"> </span>' : '<span aria-hidden="true">' + c.replace(/[<>&]/g, '') + '</span>'; }).join('');
+    // un mot ne se coupe jamais : chaque mot est un bloc insécable de palettes
+    el.innerHTML = text.split(' ').filter(Boolean).map(function (w) {
+      return '<span class="w" aria-hidden="true">' + w.split('').map(function (c) { return '<b>' + c.replace(/[<>&]/g, '') + '</b>'; }).join('') + '</span>';
+    }).join('');
     if (REDUCED) return;
-    $$('span:not(.sp)', el).forEach(function (s, i) {
-      var target = s.textContent, n = 0, max = 6 + i * 2 + Math.floor(Math.random() * 4);
+    $$('b', el).forEach(function (s, i) {
+      var target = s.textContent; if (!/[A-Z0-9]/.test(target)) return; var n = 0, max = 6 + i * 2 + Math.floor(Math.random() * 4);
       var iv = setInterval(function () {
         s.textContent = n >= max ? target : CHARS[Math.floor(Math.random() * CHARS.length)];
         if (++n > max) clearInterval(iv);
@@ -137,7 +140,7 @@
       weather.then(function (c) {
         if (!c) { flap($('[data-flap="meteo"]'), '—'); return; }
         var code = c.weather_code, sky = code === 0 ? 'Soleil' : code < 3 ? 'Eclaircies' : code < 50 ? 'Nuageux' : code < 70 ? 'Pluie' : code < 80 ? 'Neige' : 'Averses';
-        flap($('[data-flap="meteo"]'), Math.round(c.temperature_2m) + 'C ' + sky);
+        flap($('[data-flap="meteo"]'), Math.round(c.temperature_2m) + '° ' + sky);
         $('[data-flap-sub="meteo"]').textContent = 'Vent ' + Math.round(c.wind_speed_10m) + ' km/h sur le parcours';
       });
       nextEv.then(function (e) {

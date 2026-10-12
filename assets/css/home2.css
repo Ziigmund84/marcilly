@@ -66,13 +66,12 @@ a.flap:hover { border-color: rgba(255,255,255,.35); }
 .flap__label { font-size: .82rem; font-weight: 600; color: var(--green-light); display: flex; align-items: center; gap: .45rem; }
 .flap__label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green-light); box-shadow: 0 0 10px var(--green-light); }
 .flap__label.is-off::before { background: var(--red); box-shadow: 0 0 10px var(--red); }
-.flap__value { display: flex; flex-wrap: wrap; gap: 3px; align-content: start; }
-.flap__value span { display: inline-grid; place-items: center; min-width: .78em; height: 1.32em; padding: 0 .06em; background: linear-gradient(#1B2A3D 0 49%, #142233 51% 100%); border-radius: 4px;
-  font-weight: 800; font-variation-settings: 'wdth' 90; font-size: clamp(1.25rem, 1rem + 1vw, 1.7rem); line-height: 1; color: #fff; position: relative; box-shadow: inset 0 -1px 0 rgba(0,0,0,.4); }
-.flap__value span::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55); }
-.flap__value span.sp { background: transparent; box-shadow: none; min-width: .4em; }
-.flap__value span.sp::after { display: none; }
-.flap__value.is-accent span:not(.sp) { color: #FFB1AA; }
+.flap__value { display: flex; flex-wrap: wrap; gap: 6px 12px; align-content: start; }
+.flap__value .w { display: inline-flex; gap: 3px; white-space: nowrap; }
+.flap__value b { display: inline-grid; place-items: center; min-width: .78em; height: 1.32em; padding: 0 .06em; background: linear-gradient(#1B2A3D 0 49%, #142233 51% 100%); border-radius: 4px;
+  font-weight: 800; font-variation-settings: 'wdth' 90; font-size: clamp(1.15rem, .9rem + 1vw, 1.6rem); line-height: 1; color: #fff; position: relative; box-shadow: inset 0 -1px 0 rgba(0,0,0,.4); }
+.flap__value b::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55); }
+.flap__value.is-accent b { color: #FFB1AA; }
 .flap__sub { color: rgba(255,255,255,.65); font-size: .9rem; margin: 0; }
 
 /* ---------- Parcours en cartes empilées ---------- */

@@ -17,7 +17,7 @@
 
     // trajectoire en pourcentage de l'écran : départ sur le tee, sommet hors champ, atterrissage
     var A = { x: 50, y: 0 }, C = { x: 44, y: -30 }, B = { x: 58, y: 60 };
-    var size = 0;
+    var size = 0, len = 1;
     function measure() {
       var h = hero.clientHeight, w = hero.clientWidth;
       size = ball.offsetWidth;
@@ -25,8 +25,11 @@
       var peg = $('.tee__peg', hero);
       var pegTop = h - (h * .13) - peg.offsetHeight;
       A.y = (pegTop - size / 2 + 4) / h * 100;
-      var d = 'M' + A.x + ' ' + A.y + ' Q' + C.x + ' ' + C.y + ' ' + B.x + ' ' + B.y;
+      // le traceur est tracé en pixels réels pour que l'animation du trait soit exacte
+      tracer.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+      var d = 'M' + (A.x * w / 100) + ' ' + (A.y * h / 100) + ' Q' + (C.x * w / 100) + ' ' + (C.y * h / 100) + ' ' + (B.x * w / 100) + ' ' + (B.y * h / 100);
       paths.forEach(function (p) { p.setAttribute('d', d); });
+      len = paths[0].getTotalLength();
       ripple.style.left = B.x + '%'; ripple.style.top = B.y + '%';
       place(st.t);
     }
@@ -38,7 +41,7 @@
       var sc = 1 - .93 * Math.pow(Math.min(1, t * 1.05), .55); // la balle s'éloigne
       gsap.set(ball, { x: x - size / 2, y: y - size / 2 + st.drop, scale: sc, scaleY: sc * st.squash, transformOrigin: '50% 50%' });
       if (dimples) gsap.set(dimples, { x: -t * 260 });
-      paths.forEach(function (p) { p.style.strokeDasharray = '1'; p.style.strokeDashoffset = String(1 - Math.min(1, t)); });
+      paths.forEach(function (p) { p.style.strokeDasharray = len + ' ' + (len + 10); p.style.strokeDashoffset = String(len * (1 - Math.min(1, t))); });
     }
 
     // apparition : la balle tombe sur son tee
@@ -123,7 +126,7 @@
     var weather = fetch('https://api.open-meteo.com/v1/forecast?latitude=' + W.lat + '&longitude=' + W.lng + '&current=temperature_2m,weather_code,wind_speed_10m&timezone=Europe%2FParis')
       .then(function (r) { return r.json(); }).then(function (j) { return j.current; }).catch(function () { return null; });
     // prochaine compétition
-    var sb = null; try { sb = window.supabase.createClient(window.MARCILLY.SUPABASE_URL, window.MARCILLY.SUPABASE_KEY, { auth: { persistSession: false } }); } catch (e) {}
+    var sb = null; try { sb = window.supabase.createClient(window.MARCILLY.SUPABASE_URL, window.MARCILLY.SUPABASE_KEY, { auth: { persistSession: false, storageKey: 'marcilly-home2' } }); } catch (e) {}
     var iso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
     var nextEv = sb ? sb.from('marcilly_events').select('title,date').gte('date', iso).order('date').limit(1).then(function (r) { return (r.data || [])[0]; }) : Promise.resolve(null);
 

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Restaurant La Bergerie | Golf de Marcilly</title>
+<meta name="description" content="Restaurant La Bergerie au Golf de Marcilly : cuisine simple et gourmande tous les midis, menus de groupe, séminaires et réceptions sur devis.">
+<meta property="og:title" content="Restaurant La Bergerie | Golf de Marcilly">
+<meta property="og:description" content="Restaurant La Bergerie au Golf de Marcilly : cuisine simple et gourmande tous les midis, menus de groupe, séminaires et réceptions sur devis.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/marcilly-media/import/aerial-clubhouse.jpg">
+<meta name="theme-color" content="#15253A">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="restaurant">
+<a class="skip-link" href="#main">Aller au contenu</a>
+<div id="layout-top"></div>
+<main id="main">
+<section class="page-hero" data-block="restaurant.intro">
+  <div class="page-hero__bg"><img data-field="image" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/marcilly-media/import/11062b_3a5303a0797c488ca633f571ab536c4f.jpg" alt=""></div>
+  <div class="page-hero__word" aria-hidden="true">Bergerie</div>
+  <div class="wrap on-dark">
+    <span class="kicker">Restaurant</span>
+    <h1 data-split data-field="title">La Bergerie</h1>
+    <div class="lead" data-field="body"><p>Du lundi au dimanche midi, le restaurant La Bergerie vous accueille avec une cuisine simple et gourmande.</p></div>
+    <div class="btn-row"><a class="btn" href="#carte"><span>La carte du moment</span></a><a class="btn btn--ghost" href="#devis"><span>Demander un devis</span></a></div>
+  </div>
+</section>
+
+<section class="section section--tight section--sand">
+  <div class="wrap grid-2">
+    <div class="stack"><span class="kicker">Ouvert à tous</span><h2 data-split>Tous les midis</h2><p class="lead" style="margin:0">Golfeurs ou non, tout le monde est le bienvenu à table.</p></div>
+    <div class="hours-card" style="background:#fff">
+      <div><span>Lundi au vendredi</span><strong data-set="restaurant_hours.weekdays">12h00 – 14h00</strong></div>
+      <div><span>Samedi et dimanche</span><strong data-set="restaurant_hours.weekend">12h00 – 15h00</strong></div>
+      <div style="margin-top:.6rem"><span>Réservation</span><a data-set-tel="contact.phone" href="#"><strong data-set="contact.phone">02 38 76 11 73</strong></a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="carte">
+  <div class="wrap">
+    <div class="section-head"><div><span class="kicker">Selon le marché</span><h2 data-split>La carte du moment</h2></div></div>
+    <div class="menu-cols">
+      <div class="menu-col"><h3>Entrées</h3><div data-prices="carte-entrees" data-style="dishes"></div></div>
+      <div class="menu-col"><h3>Plats</h3><div data-prices="carte-plats" data-style="dishes"></div></div>
+      <div class="menu-col"><h3>Desserts</h3><div data-prices="carte-desserts" data-style="dishes"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--navy">
+  <div class="wrap">
+    <div class="section-head on-dark"><div><span class="kicker">Groupes et entreprises</span><h2 data-split>Nos menus de groupe</h2></div><a class="btn btn--light" href="#devis"><span>Je demande un devis</span></a></div>
+    <div class="group-menus" data-prices="menu-groupe" data-style="menus"></div>
+  </div>
+</section>
+
+<section class="section" data-block="restaurant.reception">
+  <div class="wrap grid-2">
+    <div class="media-frame reveal-img"><img data-field="image" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/marcilly-media/import/11062b_dfcae255c092446980e321d5b22be41a.jpg" alt="Assiette dressée par le chef" loading="lazy"></div>
+    <div class="stack">
+      <span class="kicker">Réceptions</span>
+      <h2 data-split data-field="title">Vos réceptions et séminaires</h2>
+      <div class="prose lead" data-field="body"><p>Repas de famille, soirée privée, séminaire : la salle est équipée et le cadre bucolique. Parlez-nous de votre projet.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--sky" data-block="restaurant.cgv">
+  <div class="wrap grid-2" style="align-items:start">
+    <div class="stack">
+      <span class="kicker">Bon à savoir</span>
+      <h2 data-split data-field="title">Conditions de réservation</h2>
+      <div class="prose" data-field="body"></div>
+    </div>
+    <div class="panel" id="devis">
+      <h3 style="margin-bottom:.4rem">Demande de devis</h3>
+      <p style="color:var(--muted)">Remplissez ce formulaire, nous vous envoyons un devis personnalisé dans les meilleurs délais.</p>
+      <form class="form" data-message="devis" novalidate>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field"><label for="d-name">Nom, prénom ou entreprise</label><input id="d-name" name="name" required autocomplete="name"></div>
+        <div class="form-row">
+          <div class="field"><label for="d-email">E-mail</label><input id="d-email" name="email" type="email" required autocomplete="email"></div>
+          <div class="field"><label for="d-phone">Téléphone</label><input id="d-phone" name="phone" type="tel" autocomplete="tel"></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label for="d-part">Nombre de participants</label><input id="d-part" name="participants" type="number" min="1" max="1000"></div>
+          <div class="field"><label for="d-date">Date souhaitée</label><input id="d-date" name="wished_date" type="date"></div>
+        </div>
+        <div class="field"><label for="d-msg">Votre demande</label><textarea id="d-msg" name="message" required placeholder="Type d'événement, menu envisagé, horaires…"></textarea></div>
+        <label class="consent"><input type="checkbox" required> J'accepte que le Golf de Marcilly utilise ces informations pour me répondre et établir un devis.</label>
+        <button class="btn" type="submit"><span>Envoyer ma demande</span></button>
+        <p class="form-status" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+<div id="layout-bottom"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

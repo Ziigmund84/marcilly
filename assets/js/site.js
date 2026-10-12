@@ -486,11 +486,24 @@
 
   function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
 
+  /* --- Accueil : parcours en défilement horizontal --- */
+  function horizontalCourses() {
+    var sec = $('.courses'), track = $('.courses__track'); if (!sec || !track) return;
+    var vp = $('.courses__viewport');
+    if (!HAS_GSAP || window.innerWidth < 760) { vp.classList.add('is-native'); return; }
+    var dist = function () { return Math.max(0, track.scrollWidth - window.innerWidth); };
+    var tw = gsap.to(track, { x: function () { return -dist(); }, ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: .6, invalidateOnRefresh: true, anticipatePin: 1,
+      onUpdate: function (s) { gsap.set('.courses__progress span', { scaleX: s.progress }); } } });
+    $$('.course-card__img img', track).forEach(function (img) {
+      gsap.fromTo(img, { xPercent: -8 }, { xPercent: 8, ease: 'none', scrollTrigger: { trigger: img.closest('.course-card'), containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
+    });
+  }
+
   /* ---------------- pages ---------------- */
   var pageTasks = {
     accueil: function () {
       return Promise.all([
-        q('marcilly_courses', function (b) { return b.order('sort'); }).then(function (l) { renderCourses(l, $('#course-list'), 'list'); if (window.MarcillyCourseList) window.MarcillyCourseList(); }),
+        q('marcilly_courses', function (b) { return b.order('sort'); }).then(function (l) { renderCourses(l, $('.courses__track'), 'cards'); horizontalCourses(); }),
         q('marcilly_events', function (b) { return b.gte('date', todayISO()).order('date').limit(1); }).then(function (r) { if (window.MarcillyNextInfo) window.MarcillyNextInfo(r[0]); }),
         renderNextEvents($('#next-events'), $('#countdown')),
         renderPosts($('#home-posts'), 3),

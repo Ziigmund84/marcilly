@@ -9,7 +9,7 @@ Site multipage du Golf de Marcilly (Marcilly-en-Villette, Loiret), hébergé sur
 
 | Page | Fichier | Contenu |
 |---|---|---|
-| Accueil | `index.html` | Photo plein cadre avec infos du jour (ouverture, météo, prochaine compétition), phrase d'accueil, liste des parcours, grande photo, famille, compétitions, actualités, restaurant, partenaires |
+| Accueil | `index.html` | Photo plein cadre avec infos du jour (ouverture, météo, prochaine compétition), phrase d'accueil, vignettes des parcours en défilement horizontal, grande photo, famille, compétitions, actualités, restaurant, partenaires |
 | Parcours | `parcours.html` | Les 4 parcours (45 trous), entraînement, météo, galerie |
 | Tarifs | `tarifs.html` | Découverte, green fees, practice, location, abonnements |
 | Enseignement | `enseignement.html` | École de golf, Label Sportif, cours adultes, pros, Académie |

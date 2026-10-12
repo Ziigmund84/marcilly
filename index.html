@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300..700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/marcilly-media/import/aerial-clubhouse.jpg">
-<link rel="stylesheet" href="assets/css/style.css?v=20">
-<link rel="stylesheet" href="assets/css/home2.css?v=20">
+<link rel="stylesheet" href="assets/css/style.css?v=21">
+<link rel="stylesheet" href="assets/css/home2.css?v=21">
 </head>
 <body data-page="accueil">
 <a class="skip-link" href="#main">Aller au contenu</a>
@@ -59,13 +59,16 @@
     </div>
   </section>
 
-  <!-- Les parcours -->
-  <section class="section section--tight" aria-labelledby="clist-title" style="padding-top:0">
-    <div class="wrap">
-      <div class="section-head"><div><span class="kicker">Les parcours</span><h2 id="clist-title" data-split>Quatre façons de jouer</h2></div><a class="link-arrow" href="parcours.html">Tous les détails</a></div>
-      <div class="clist" id="course-list"><div class="skeleton" style="height:320px;margin-top:1rem"></div></div>
+  <!-- Les parcours : vignettes en défilement horizontal -->
+  <section class="courses" aria-labelledby="courses-title">
+    <div class="wrap courses__head on-dark">
+      <div class="section-head" style="margin-bottom:0">
+        <div><span class="kicker">Les parcours</span><h2 id="courses-title" data-split>Quatre façons de jouer</h2></div>
+        <a class="btn btn--light" href="parcours.html"><span>Tous les détails</span></a>
+      </div>
     </div>
-    <div class="cpreview" aria-hidden="true"><img src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/marcilly-media/import/aerial-course.jpg" alt=""></div>
+    <div class="courses__viewport"><div class="courses__track"><div class="skeleton" style="width:78vw;height:420px;opacity:.2"></div></div></div>
+    <div class="courses__progress" aria-hidden="true"><span></span></div>
   </section>
 
   <!-- Grande photo -->
@@ -152,8 +155,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="assets/js/config.js?v=20"></script>
-<script src="assets/js/site.js?v=20"></script>
-<script src="assets/js/home2.js?v=20"></script>
+<script src="assets/js/config.js?v=21"></script>
+<script src="assets/js/site.js?v=21"></script>
+<script src="assets/js/home2.js?v=21"></script>
 </body>
 </html>

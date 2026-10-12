@@ -43,31 +43,6 @@
 .statement__foot { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; align-items: end; justify-content: space-between; margin-top: clamp(2.5rem, 5vw, 4rem); }
 .statement__foot p { margin: 0; color: var(--muted); max-width: 46ch; }
 
-/* ---------- Parcours en liste ---------- */
-.clist { border-top: 2px solid var(--navy-deep); }
-.crow { display: grid; grid-template-columns: 5.5rem 1fr auto auto; gap: 1rem 2rem; align-items: center; padding: 1.6rem 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); position: relative; }
-.crow__holes { font-size: clamp(2.2rem, 1.5rem + 2vw, 3.4rem); font-weight: 500; line-height: 1; color: var(--green); letter-spacing: -.015em; }
-.crow__name { font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 500; line-height: 1.05; letter-spacing: -.02em; transition: transform .45s var(--ease), color .3s; }
-.crow__name small { display: block; font-size: .95rem; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: .35rem; }
-.crow__meta { color: var(--muted); font-size: .95rem; text-align: right; white-space: nowrap; }
-.crow__go { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--navy-deep); display: grid; place-items: center; transition: background .3s, color .3s; }
-.crow__go svg { width: 18px; height: 18px; }
-.crow__thumb { display: none; }
-@media (hover: hover) {
-  .crow:hover .crow__name { transform: translateX(10px); color: var(--red); }
-  .crow:hover .crow__go { background: var(--navy-deep); color: #fff; }
-}
-@media (max-width: 760px) {
-  .crow { grid-template-columns: 76px 1fr; gap: .4rem 1rem; }
-  .crow__holes, .crow__go { display: none; }
-  .crow__meta { text-align: left; white-space: normal; }
-  .crow__thumb { display: block; grid-row: 1 / span 2; width: 76px; height: 76px; border-radius: 12px; object-fit: cover; }
-}
-/* aperçu qui suit la souris (ordinateur uniquement) */
-.cpreview { position: fixed; left: 0; top: 0; width: 320px; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; pointer-events: none; z-index: 30; opacity: 0; box-shadow: 0 30px 60px -20px rgba(14,26,41,.45); }
-.cpreview img { width: 100%; height: 100%; object-fit: cover; }
-@media (hover: none) { .cpreview { display: none; } }
-
 /* ---------- Grande photo qui s'élargit ---------- */
 .band { padding-bottom: clamp(4rem, 8vw, 6rem); }
 .band__frame { width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; height: min(78vh, 720px); border-radius: var(--radius-l); overflow: hidden; position: relative; }

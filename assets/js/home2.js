@@ -42,21 +42,6 @@
     gsap.to($$('.wd', el), { opacity: 1, ease: 'none', stagger: .1, scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true } });
   }
 
-  /* parcours : l'aperçu photo suit la souris sur ordinateur */
-  window.MarcillyCourseList = function () {
-    var list = $('.clist'), prev = $('.cpreview'); if (!list || !prev || !window.gsap) return;
-    if (!window.matchMedia('(hover: hover)').matches) return;
-    var img = $('img', prev);
-    window.addEventListener('scroll', function () { gsap.to(prev, { opacity: 0, scale: .85, duration: .2, overwrite: 'auto' }); }, { passive: true });
-    var xTo = gsap.quickTo(prev, 'x', { duration: .5, ease: 'power3' }), yTo = gsap.quickTo(prev, 'y', { duration: .5, ease: 'power3' });
-    gsap.set(prev, { xPercent: -50, yPercent: -50, scale: .85 });
-    list.addEventListener('mousemove', function (e) { xTo(e.clientX + 180); yTo(e.clientY); });
-    $$('.crow', list).forEach(function (row) {
-      row.addEventListener('mouseenter', function (e) { if (row.dataset.img) img.src = row.dataset.img; if (+gsap.getProperty(prev, 'opacity') < .05) gsap.set(prev, { x: e.clientX + 180, y: e.clientY }); gsap.to(prev, { opacity: 1, scale: 1, duration: .35, ease: 'power3.out' }); });
-      row.addEventListener('mouseleave', function () { gsap.to(prev, { opacity: 0, scale: .85, duration: .3 }); });
-    });
-  };
-
   /* grande photo : elle s'élargit jusqu'aux bords de l'écran */
   function band() {
     var f = $('.band__frame'); if (!f || !MOTION) return;

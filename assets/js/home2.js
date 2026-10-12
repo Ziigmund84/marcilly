@@ -10,34 +10,26 @@
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
 
-  /* ouverture : une fenêtre au centre s'agrandit jusqu'au plein écran sur la vue aérienne,
-     puis le voile marine se pose et le titre monte. Au défilement, la photo glisse et s'assombrit. */
+  /* ouverture : la photo apparaît en fondu depuis le marine avec un léger recul,
+     puis le texte se pose. Au défilement, la photo glisse et s'assombrit. */
   function opening() {
     var hero = $('#plain'); if (!hero) return;
     if (!MOTION) { hero.classList.remove('is-pre'); return; }
-    var win = $('.plain__win', hero), img = $('.plain__img img', hero), items = $$('.plain__content .wrap > *', hero);
-    var portrait = window.innerWidth / window.innerHeight < .9;
-    gsap.set(win, { clipPath: portrait ? 'inset(32% 16% 32% 16% round 22px)' : 'inset(30% 34% 30% 34% round 22px)' });
-    gsap.set(img, { scale: 1.45 });
-    gsap.set(items, { y: 40, opacity: 0 });
-    gsap.set(['.plain__veil', '.plain__word'], { opacity: 0 });
+    var img = $('.plain__img img', hero), items = $$('.plain__content > *', hero);
+    gsap.set(img, { opacity: 0, scale: 1.08 });
+    gsap.set(items, { opacity: 0, y: 14 });
     hero.classList.remove('is-pre');
-    gsap.set('.plain__content', { opacity: 1 });
     var tl = gsap.timeline({ paused: true });
-    tl.to(win, { clipPath: 'inset(0% 0% 0% 0% round 0px)', duration: 1.7, ease: 'expo.inOut' })
-      .to(img, { scale: 1.05, duration: 2.4, ease: 'expo.inOut' }, 0)
-      .to('.plain__veil', { opacity: 1, duration: 1.1, ease: 'power2.out' }, 1.15)
-      .fromTo('.plain__word', { opacity: 0, xPercent: 6 }, { opacity: 1, xPercent: 0, duration: 1.6, ease: 'expo.out' }, 1.3)
-      .to(items, { y: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: .08 }, 1.35);
-    // on attend que la photo soit prête pour ne pas ouvrir sur un cadre vide
+    tl.to(img, { opacity: 1, duration: 1.8, ease: 'power2.out' })
+      .to(img, { scale: 1, duration: 3.2, ease: 'power2.out' }, 0)
+      .to(items, { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', stagger: .14 }, .7);
     var started = false;
     function go() { if (!started) { started = true; tl.play(); } }
     if (img.complete && img.naturalWidth) go();
     else { img.addEventListener('load', go, { once: true }); img.addEventListener('error', go, { once: true }); }
     setTimeout(go, 2500);
-    // au défilement
-    gsap.to('.plain__img', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.plain__dark', { opacity: .6, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.plain__img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.plain__dark', { opacity: .5, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
   }
 
   /* phrase d'accueil : les mots s'allument au fil du défilement */

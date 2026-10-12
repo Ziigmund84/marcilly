@@ -2,33 +2,38 @@
    Accueil v2 — version sobre : la photo et la typographie d'abord
    ========================================================= */
 
-/* ---------- Ouverture plein cadre ---------- */
-.plain { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: var(--navy-ink); color: #fff; }
-.plain__win { position: absolute; inset: 0; overflow: hidden; }
+/* ---------- Ouverture plein cadre : sobre et centrée ---------- */
+.plain { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: var(--navy-ink); color: #fff; display: grid; place-items: center; text-align: center; }
 .plain__img { position: absolute; inset: -6% 0 0 0; will-change: transform; }
-.plain__img img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); will-change: transform; }
-/* voile marine semi-transparent, plus dense à gauche derrière le texte (comme les pages intérieures) */
-.plain__veil { position: absolute; inset: 0; background:
-  linear-gradient(0deg, rgba(14,26,41,.72) 0%, rgba(14,26,41,0) 45%),
-  linear-gradient(90deg, rgba(21,37,58,.9) 0%, rgba(21,37,58,.62) 45%, rgba(21,37,58,.38) 100%); }
-@media (max-width: 700px) { .plain__veil { background: linear-gradient(0deg, rgba(14,26,41,.85) 0%, rgba(21,37,58,.55) 55%, rgba(21,37,58,.45) 100%); } }
+.plain__img img { width: 100%; height: 100%; object-fit: cover; will-change: transform, opacity; }
+/* voile marine semi-transparent, uniforme, un peu plus dense en bas */
+.plain__veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(21,37,58,.42) 0%, rgba(21,37,58,.5) 55%, rgba(14,26,41,.72) 100%); }
 .plain__dark { position: absolute; inset: 0; background: var(--navy-ink); opacity: 0; pointer-events: none; }
-.plain__word { position: absolute; right: -2vw; top: calc(var(--header-h) + 7vh); font-size: clamp(5rem, 17vw, 16rem); font-weight: 900; font-variation-settings: 'wdth' 125; line-height: .8; letter-spacing: -.05em;
-  color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.16); white-space: nowrap; pointer-events: none; user-select: none; }
-@media (max-width: 700px) { .plain__word { top: calc(var(--header-h) + 9vh); font-size: 24vw; } }
-/* état de départ de l'entrée (retiré si les animations sont désactivées) */
-.plain.is-pre .plain__win { clip-path: inset(30% 34% 30% 34% round 22px); }
-.plain.is-pre .plain__veil, .plain.is-pre .plain__word, .plain.is-pre .plain__content { opacity: 0; }
-@media (max-aspect-ratio: 9/10) { .plain.is-pre .plain__win { clip-path: inset(32% 16% 32% 16% round 22px); } }
-.plain__content { position: absolute; left: 0; right: 0; bottom: 0; padding-bottom: 1.5rem; z-index: 1; }
-.plain__place { font-size: var(--step--1); font-weight: 600; color: rgba(255,255,255,.75); margin-bottom: 1rem; }
-.plain h1 { font-size: clamp(2.6rem, 1rem + 6.2vw, 7rem); max-width: 12ch; margin-bottom: 1.2rem; }
-.plain .lead { color: rgba(255,255,255,.85); margin-bottom: 1.8rem; }
-.plain__info { margin-top: clamp(2rem, 6vh, 3.5rem); border-top: 1px solid rgba(255,255,255,.22); display: grid; grid-template-columns: repeat(3, 1fr); }
-.plain__info > * { padding: 1rem 1.2rem 0 0; font-size: .92rem; color: rgba(255,255,255,.72); text-decoration: none; }
-.plain__info strong { display: block; color: #fff; font-size: 1rem; font-variation-settings: 'wdth' 110; }
-.plain__info a:hover strong { text-decoration: underline; text-underline-offset: 3px; }
-@media (max-width: 700px) { .plain__info { grid-template-columns: 1fr 1fr; } .plain__info > :last-child { display: none; } }
+.plain__content { position: relative; z-index: 1; padding: var(--header-h) var(--gutter) 0; max-width: 900px; }
+.plain__place { font-size: .95rem; font-weight: 500; letter-spacing: .02em; color: rgba(255,255,255,.78); margin: 0 auto 1.4rem; max-width: none; }
+.plain h1 { font-size: clamp(2.8rem, 1.4rem + 5.4vw, 6.4rem); font-weight: 800; font-variation-settings: 'wdth' 112; letter-spacing: -.025em; line-height: 1; margin: 0 auto; max-width: none; }
+.plain__lead p { font-size: clamp(1.05rem, 1rem + .4vw, 1.3rem); color: rgba(255,255,255,.85); margin: 1.4rem auto 0; max-width: 40ch; }
+.plain__cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem 2rem; margin-top: 2.4rem; }
+.plain__link { color: #fff; text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,.5); padding-bottom: 2px; transition: border-color .3s; }
+.plain__link:hover { border-color: #fff; }
+/* état de départ de l'entrée */
+.plain.is-pre .plain__img img { opacity: 0; }
+.plain.is-pre .plain__content > * { opacity: 0; }
+@keyframes plain-safe { to { opacity: 1; } }
+.plain.is-pre .plain__img img, .plain.is-pre .plain__content > * { animation: plain-safe .8s 3.5s forwards; }
+
+/* ---------- Bandeau des infos du jour ---------- */
+.today-strip { background: var(--navy-ink); color: rgba(255,255,255,.7); border-top: 1px solid rgba(255,255,255,.08); }
+.today-strip__row { display: grid; grid-template-columns: repeat(3, 1fr); }
+.today-strip__row > * { padding: 1.3rem 1.5rem 1.4rem 0; font-size: .9rem; text-decoration: none; color: inherit; }
+.today-strip__row > * + * { padding-left: 1.5rem; border-left: 1px solid rgba(255,255,255,.1); }
+.today-strip strong { display: block; color: #fff; font-weight: 600; font-size: .98rem; margin-bottom: .15rem; }
+.today-strip a:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 700px) {
+  .today-strip__row { grid-template-columns: 1fr; }
+  .today-strip__row > * { padding: .9rem 0; }
+  .today-strip__row > * + * { padding-left: 0; border-left: 0; border-top: 1px solid rgba(255,255,255,.1); }
+}
 
 /* ---------- Phrase d'accueil ---------- */
 .statement { padding-block: clamp(5rem, 12vw, 10rem); }
@@ -70,7 +75,3 @@
 .band__frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,26,41,0) 50%, rgba(14,26,41,.7)); }
 .band__cap { position: absolute; left: clamp(1rem, 4vw, 3rem); bottom: clamp(1rem, 4vw, 2.5rem); color: #fff; max-width: 34ch; z-index: 1; }
 .band__cap strong { display: block; font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 800; font-variation-settings: 'wdth' 115; line-height: 1.1; margin-bottom: .5rem; }
-/* filet de sécurité : si le script ne démarre pas, tout s'affiche au bout de 4 s */
-@keyframes plain-safe { to { opacity: 1; clip-path: inset(0 0 0 0 round 0); } }
-.plain.is-pre .plain__win, .plain.is-pre .plain__veil, .plain.is-pre .plain__word, .plain.is-pre .plain__content { animation: plain-safe .6s 4s forwards; }
-@media (max-height: 760px) { .plain__word { display: none; } }

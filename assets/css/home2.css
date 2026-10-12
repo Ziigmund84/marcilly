@@ -4,12 +4,23 @@
 
 /* ---------- Ouverture plein cadre ---------- */
 .plain { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: var(--navy-ink); color: #fff; }
+.plain__win { position: absolute; inset: 0; overflow: hidden; }
 .plain__img { position: absolute; inset: -6% 0 0 0; will-change: transform; }
-.plain__img img { width: 100%; height: 100%; object-fit: cover; animation: slowzoom 28s ease-out both; }
-@keyframes slowzoom { from { transform: scale(1.12); } to { transform: scale(1); } }
-.plain__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,26,41,.45) 0%, rgba(14,26,41,0) 28%, rgba(14,26,41,0) 45%, rgba(14,26,41,.82) 100%); }
+.plain__img img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); will-change: transform; }
+/* voile marine semi-transparent, plus dense à gauche derrière le texte (comme les pages intérieures) */
+.plain__veil { position: absolute; inset: 0; background:
+  linear-gradient(0deg, rgba(14,26,41,.72) 0%, rgba(14,26,41,0) 45%),
+  linear-gradient(90deg, rgba(21,37,58,.9) 0%, rgba(21,37,58,.62) 45%, rgba(21,37,58,.38) 100%); }
+@media (max-width: 700px) { .plain__veil { background: linear-gradient(0deg, rgba(14,26,41,.85) 0%, rgba(21,37,58,.55) 55%, rgba(21,37,58,.45) 100%); } }
 .plain__dark { position: absolute; inset: 0; background: var(--navy-ink); opacity: 0; pointer-events: none; }
-.plain__content { position: absolute; left: 0; right: 0; bottom: 0; padding-bottom: 1.5rem; }
+.plain__word { position: absolute; right: -2vw; bottom: 26vh; font-size: clamp(5rem, 17vw, 16rem); font-weight: 900; font-variation-settings: 'wdth' 125; line-height: .8; letter-spacing: -.05em;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.16); white-space: nowrap; pointer-events: none; user-select: none; }
+@media (max-width: 700px) { .plain__word { bottom: auto; top: 18vh; font-size: 22vw; } }
+/* état de départ de l'entrée (retiré si les animations sont désactivées) */
+.plain.is-pre .plain__win { clip-path: inset(30% 34% 30% 34% round 22px); }
+.plain.is-pre .plain__veil, .plain.is-pre .plain__word, .plain.is-pre .plain__content { opacity: 0; }
+@media (max-aspect-ratio: 9/10) { .plain.is-pre .plain__win { clip-path: inset(32% 16% 32% 16% round 22px); } }
+.plain__content { position: absolute; left: 0; right: 0; bottom: 0; padding-bottom: 1.5rem; z-index: 1; }
 .plain__place { font-size: var(--step--1); font-weight: 600; color: rgba(255,255,255,.75); margin-bottom: 1rem; }
 .plain h1 { font-size: clamp(2.6rem, 1rem + 6.2vw, 7rem); max-width: 12ch; margin-bottom: 1.2rem; }
 .plain .lead { color: rgba(255,255,255,.85); margin-bottom: 1.8rem; }
@@ -59,3 +70,6 @@
 .band__frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,26,41,0) 50%, rgba(14,26,41,.7)); }
 .band__cap { position: absolute; left: clamp(1rem, 4vw, 3rem); bottom: clamp(1rem, 4vw, 2.5rem); color: #fff; max-width: 34ch; z-index: 1; }
 .band__cap strong { display: block; font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 800; font-variation-settings: 'wdth' 115; line-height: 1.1; margin-bottom: .5rem; }
+/* filet de sécurité : si le script ne démarre pas, tout s'affiche au bout de 4 s */
+@keyframes plain-safe { to { opacity: 1; clip-path: inset(0 0 0 0 round 0); } }
+.plain.is-pre .plain__win, .plain.is-pre .plain__veil, .plain.is-pre .plain__word, .plain.is-pre .plain__content { animation: plain-safe .6s 4s forwards; }

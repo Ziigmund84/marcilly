@@ -149,7 +149,7 @@
       window.dispatchEvent(new Event('scroll'));
       try { sessionStorage.setItem('mc-announce', S.announcement.text || ''); } catch (e) {}
     });
-    var heroEl = $('.hero, .page-hero');
+    var heroEl = $('.hero, .tee, .page-hero');
     if (heroEl && header) header.classList.add('is-over-hero', 'is-fixed');
     var ticking = false;
     function onScroll() {
@@ -185,6 +185,8 @@
     ]).then(function (r) {
       r[0].forEach(function (row) { S[row.key] = Object.assign({}, S[row.key] || {}, row.value || {}); });
       applySettings();
+      window.MARCILLY.settings = S;
+      try { window.dispatchEvent(new Event('marcilly:settings')); } catch (e) {}
       var blocks = {}; r[1].forEach(function (b) { blocks[b.key] = b; });
       applyBlocks(blocks);
     });
@@ -203,6 +205,15 @@
   function renderCourses(list, el, mode) {
     if (!el) return;
     if (!list.length) { el.innerHTML = '<p class="empty">Les parcours arrivent bientôt.</p>'; return; }
+    if (mode === 'deck') {
+      el.innerHTML = list.map(function (c, i) {
+        var dots = ''; for (var k = 1; k <= c.holes; k++) dots += '<i>' + k + '</i>';
+        return '<article class="deck-card"><div class="deck-card__img"><img src="' + esc(c.image_url || S.images.aerial) + '" alt="' + esc(c.name) + '" loading="lazy"><span class="deck-card__num" aria-hidden="true">' + c.holes + '</span></div>' +
+          '<div class="deck-card__body"><span class="kicker" style="color:var(--green-light)">' + c.holes + ' trous</span><h3>' + esc(c.name) + '</h3><div class="chips">' + (c.par ? '<span class="chip"><b>' + c.par + '</b> par</span>' : '') + (c.length_m ? '<span class="chip"><b>' + c.length_m.toLocaleString('fr-FR') + '</b> m</span>' : '') + (c.level ? '<span class="chip chip--green">' + esc(c.level) + '</span>' : '') + '</div>' +
+          '<p>' + esc(c.description || '') + '</p><div class="btn-row"><a class="btn btn--light" href="' + esc(S.links.booking) + '" target="_blank" rel="noopener"><span>Réserver</span></a><a class="btn btn--ghost" href="parcours.html#' + slug(c.name) + '"><span>En savoir plus</span></a></div></div><div class="deck-card__dim"></div></article>';
+      }).join('');
+      return;
+    }
     if (mode === 'cards') {
       el.innerHTML = list.map(function (c) {
         var dots = ''; for (var i = 1; i <= c.holes; i++) dots += '<i>' + i + '</i>';
@@ -639,6 +650,14 @@
       loadWeather();
       return Promise.all([
         q('marcilly_courses', function (b) { return b.order('sort'); }).then(function (l) { renderCourses(l, $('.courses__track'), 'cards'); horizontalCourses(); }),
+        renderNextEvents($('#next-events'), $('#countdown')),
+        renderPosts($('#home-posts'), 3),
+        q('marcilly_partners', function (b) { return b.order('sort'); }).then(renderPartners)
+      ]);
+    },
+    accueil2: function () {
+      return Promise.all([
+        q('marcilly_courses', function (b) { return b.order('sort'); }).then(function (l) { renderCourses(l, $('#deck-list'), 'deck'); if (window.MarcillyDeck) window.MarcillyDeck(); }),
         renderNextEvents($('#next-events'), $('#countdown')),
         renderPosts($('#home-posts'), 3),
         q('marcilly_partners', function (b) { return b.order('sort'); }).then(renderPartners)

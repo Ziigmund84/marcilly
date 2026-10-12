@@ -1,0 +1,96 @@
+/* =========================================================
+   Accueil v2 — « Le coup de départ »
+   ========================================================= */
+
+/* ---------- Hero : départ à l'aube ---------- */
+.tee { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: var(--navy-ink); color: #fff; }
+.tee__sky { position: absolute; inset: 0; background:
+  radial-gradient(60vmax 40vmax at 50% 92%, rgba(255, 196, 140, .55), rgba(255, 196, 140, 0) 60%),
+  linear-gradient(180deg, #0B1626 0%, #15253A 30%, #2F4E70 58%, #8FA9BC 82%, #F1D2AE 100%); }
+.tee__sun { position: absolute; left: 50%; bottom: 14%; width: 46vmin; height: 46vmin; translate: -50% 50%; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 230, 190, .95) 0 18%, rgba(255, 205, 150, .35) 40%, rgba(255, 205, 150, 0) 70%); }
+.tee__cloud { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, .5); filter: blur(28px); opacity: .45; animation: drift 60s linear infinite; }
+.tee__cloud--1 { width: 40vw; height: 9vh; top: 18%; left: -10%; }
+.tee__cloud--2 { width: 30vw; height: 7vh; top: 32%; left: 55%; animation-duration: 80s; animation-direction: reverse; opacity: .3; }
+.tee__cloud--3 { width: 22vw; height: 6vh; top: 10%; left: 70%; animation-duration: 70s; opacity: .25; }
+@keyframes drift { to { transform: translateX(25vw); } }
+
+.tee__photo { position: absolute; inset: 0; opacity: 0; }
+.tee__photo img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.7); transform-origin: 56% 58%; will-change: transform; }
+.tee__shade { position: absolute; inset: 0; opacity: 0; background: linear-gradient(180deg, rgba(14,26,41,.5) 0%, rgba(14,26,41,0) 30%, rgba(14,26,41,.2) 55%, rgba(14,26,41,.9) 100%); }
+
+.tee__big { position: absolute; left: 50%; top: 46%; translate: -50% -50%; font-weight: 900; font-variation-settings: 'wdth' 125; letter-spacing: -.06em; line-height: .8;
+  font-size: clamp(14rem, 52vmin, 40rem); color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,.22); white-space: nowrap; pointer-events: none; user-select: none; }
+.tee__title { position: absolute; left: 0; right: 0; top: calc(var(--header-h) + 5vh); text-align: center; padding-inline: 1rem; }
+.tee__title p { margin: 0 auto; font-size: var(--step-1); color: rgba(255,255,255,.8); max-width: none; font-variation-settings: 'wdth' 110; }
+.tee__title strong { display: block; font-size: clamp(2.2rem, 1rem + 5vw, 5rem); font-weight: 900; font-variation-settings: 'wdth' 125; letter-spacing: -.03em; line-height: 1; color: #fff; margin-bottom: .6rem; }
+
+.tee__ground { position: absolute; left: -10%; right: -10%; bottom: -1px; height: 22vh; background:
+  radial-gradient(120% 140% at 50% 0%, #3E7D4A 0%, #2C5E37 45%, #1E4227 100%);
+  border-radius: 50% 50% 0 0 / 30% 30% 0 0; box-shadow: inset 0 18px 30px -18px rgba(255,255,255,.25); }
+.tee__peg { position: absolute; left: 50%; bottom: 13vh; width: 2.4vmin; height: 7vmin; translate: -50% 0;
+  background: linear-gradient(90deg, #E8E2D4, #fff 40%, #CFC6B2); clip-path: polygon(0 0, 100% 0, 70% 18%, 58% 100%, 42% 100%, 30% 18%); }
+
+.tee__ball { position: absolute; left: 0; top: 0; width: 15vmin; height: 15vmin; min-width: 70px; min-height: 70px; will-change: transform; z-index: 3; pointer-events: none; }
+.tee__ball svg { width: 100%; height: 100%; display: block; overflow: visible; filter: drop-shadow(0 10px 18px rgba(0,0,0,.35)); }
+.tee__shadow { position: absolute; left: 50%; bottom: 12.4vh; width: 14vmin; height: 2.4vmin; translate: -50% 0; border-radius: 50%; background: radial-gradient(rgba(0,0,0,.45), rgba(0,0,0,0) 70%); }
+
+.tee__tracer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; overflow: visible; }
+.tee__tracer path { fill: none; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.tee__tracer .glow { stroke: rgba(255, 70, 60, .45); stroke-width: 10; }
+.tee__tracer .core { stroke: #FF4A3D; stroke-width: 3.5; }
+.tee__ripple { position: absolute; width: 10vmin; height: 10vmin; border-radius: 50%; border: 3px solid #fff; translate: -50% -50%; opacity: 0; z-index: 2; pointer-events: none; }
+
+.tee__content { position: absolute; inset: auto 0 0 0; padding-bottom: clamp(2.5rem, 8vh, 5rem); opacity: 0; z-index: 4; }
+.tee__content h1 { font-size: clamp(2.6rem, 1rem + 6vw, 6.5rem); max-width: 13ch; margin-bottom: 1.2rem; }
+.tee__content .lead { color: rgba(255,255,255,.88); margin-bottom: 1.8rem; }
+.tee__cue { position: absolute; left: 50%; bottom: 3vh; translate: -50% 0; font-size: .8rem; color: rgba(255,255,255,.75); z-index: 4; display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+.tee__cue::before { content: ''; width: 2px; height: 28px; background: linear-gradient(rgba(255,255,255,0), #fff); animation: cue 1.6s ease-in-out infinite; }
+@keyframes cue { 0%, 100% { transform: scaleY(.4); transform-origin: top; } 50% { transform: scaleY(1); } }
+
+/* sans animation : l'état final directement */
+.no-motion .tee__photo, .no-motion .tee__shade, .no-motion .tee__content { opacity: 1; }
+.no-motion .tee__photo img { transform: none; }
+.no-motion .tee__sky, .no-motion .tee__sun, .no-motion .tee__cloud, .no-motion .tee__big, .no-motion .tee__title, .no-motion .tee__ground,
+.no-motion .tee__peg, .no-motion .tee__ball, .no-motion .tee__shadow, .no-motion .tee__tracer, .no-motion .tee__cue { display: none; }
+
+/* ---------- Panneau « Aujourd'hui à Marcilly » ---------- */
+.today { background: var(--navy-ink); color: #fff; padding-block: clamp(3.5rem, 8vw, 6rem); border-top: 1px solid rgba(255,255,255,.06); }
+.today__head { display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 1rem 2rem; margin-bottom: 2rem; }
+.today__head h2 { font-size: clamp(1.8rem, 1rem + 3vw, 3.4rem); }
+.today__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+@media (max-width: 980px) { .today__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .today__grid { grid-template-columns: 1fr; } }
+.flap { background: #0A1420; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 1.1rem 1.1rem 1.2rem; display: grid; gap: .7rem; min-height: 170px; text-decoration: none; position: relative; transition: border-color .3s; }
+a.flap:hover { border-color: rgba(255,255,255,.35); }
+.flap__label { font-size: .82rem; font-weight: 600; color: var(--green-light); display: flex; align-items: center; gap: .45rem; }
+.flap__label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green-light); box-shadow: 0 0 10px var(--green-light); }
+.flap__label.is-off::before { background: var(--red); box-shadow: 0 0 10px var(--red); }
+.flap__value { display: flex; flex-wrap: wrap; gap: 3px; align-content: start; }
+.flap__value span { display: inline-grid; place-items: center; min-width: .78em; height: 1.32em; padding: 0 .06em; background: linear-gradient(#1B2A3D 0 49%, #142233 51% 100%); border-radius: 4px;
+  font-weight: 800; font-variation-settings: 'wdth' 90; font-size: clamp(1.25rem, 1rem + 1vw, 1.7rem); line-height: 1; color: #fff; position: relative; box-shadow: inset 0 -1px 0 rgba(0,0,0,.4); }
+.flap__value span::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55); }
+.flap__value span.sp { background: transparent; box-shadow: none; min-width: .4em; }
+.flap__value span.sp::after { display: none; }
+.flap__value.is-accent span:not(.sp) { color: #FFB1AA; }
+.flap__sub { color: rgba(255,255,255,.65); font-size: .9rem; margin: 0; }
+
+/* ---------- Parcours en cartes empilées ---------- */
+.deck { background: var(--paper); padding-block: clamp(4rem, 9vw, 7rem); }
+.deck__list { display: grid; gap: 4vh; margin-top: 2.5rem; }
+.deck-card { position: sticky; top: calc(var(--header-h) + 1.5rem); min-height: min(72vh, 600px); border-radius: var(--radius-l); overflow: hidden; display: grid; grid-template-columns: 1.15fr 1fr; background: var(--navy-deep); color: #fff; box-shadow: 0 -20px 50px -30px rgba(14,26,41,.5); transform-origin: 50% 0; will-change: transform; }
+.deck-card:nth-child(2) { top: calc(var(--header-h) + 2.5rem); background: var(--green-deep); }
+.deck-card:nth-child(3) { top: calc(var(--header-h) + 3.5rem); background: #2F4E70; }
+.deck-card:nth-child(4) { top: calc(var(--header-h) + 4.5rem); background: #6B3A2E; }
+.deck-card__img { position: relative; overflow: hidden; }
+.deck-card__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.deck-card__num { position: absolute; left: 1.2rem; bottom: .2rem; font-size: clamp(5rem, 14vw, 11rem); font-weight: 900; font-variation-settings: 'wdth' 125; line-height: .8; color: #fff; mix-blend-mode: overlay; opacity: .9; letter-spacing: -.05em; }
+.deck-card__body { padding: clamp(1.6rem, 4vw, 3rem); display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+.deck-card h3 { font-size: clamp(2rem, 1.2rem + 3vw, 3.6rem); font-weight: 900; letter-spacing: -.03em; }
+.deck-card p { color: rgba(255,255,255,.82); margin: 0; }
+.deck-card .chip { background: rgba(255,255,255,.12); color: #fff; }
+.deck-card .chip--green { background: var(--green-light); color: var(--green-deep); }
+.deck-card__dim { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; }
+@media (max-width: 760px) {
+  .deck-card { grid-template-columns: 1fr; grid-template-rows: 38vh auto; min-height: 0; }
+}

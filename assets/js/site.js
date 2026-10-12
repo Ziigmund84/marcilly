@@ -149,7 +149,7 @@
       window.dispatchEvent(new Event('scroll'));
       try { sessionStorage.setItem('mc-announce', S.announcement.text || ''); } catch (e) {}
     });
-    var heroEl = $('.hero, .tee, .page-hero');
+    var heroEl = $('.hero, .plain, .page-hero');
     if (heroEl && header) header.classList.add('is-over-hero', 'is-fixed');
     var ticking = false;
     function onScroll() {
@@ -205,12 +205,15 @@
   function renderCourses(list, el, mode) {
     if (!el) return;
     if (!list.length) { el.innerHTML = '<p class="empty">Les parcours arrivent bientôt.</p>'; return; }
-    if (mode === 'deck') {
-      el.innerHTML = list.map(function (c, i) {
-        var dots = ''; for (var k = 1; k <= c.holes; k++) dots += '<i>' + k + '</i>';
-        return '<article class="deck-card"><div class="deck-card__img"><img src="' + esc(c.image_url || S.images.aerial) + '" alt="' + esc(c.name) + '" loading="lazy"><span class="deck-card__num" aria-hidden="true">' + c.holes + '</span></div>' +
-          '<div class="deck-card__body"><span class="kicker" style="color:var(--green-light)">' + c.holes + ' trous</span><h3>' + esc(c.name) + '</h3><div class="chips">' + (c.par ? '<span class="chip"><b>' + c.par + '</b> par</span>' : '') + (c.length_m ? '<span class="chip"><b>' + c.length_m.toLocaleString('fr-FR') + '</b> m</span>' : '') + (c.level ? '<span class="chip chip--green">' + esc(c.level) + '</span>' : '') + '</div>' +
-          '<p>' + esc(c.description || '') + '</p><div class="btn-row"><a class="btn btn--light" href="' + esc(S.links.booking) + '" target="_blank" rel="noopener"><span>Réserver</span></a><a class="btn btn--ghost" href="parcours.html#' + slug(c.name) + '"><span>En savoir plus</span></a></div></div><div class="deck-card__dim"></div></article>';
+    if (mode === 'list') {
+      el.innerHTML = list.map(function (c) {
+        var meta = [c.par ? 'Par ' + c.par : '', c.length_m ? c.length_m.toLocaleString('fr-FR') + ' m' : ''].filter(Boolean).join(', ');
+        return '<a class="crow" href="parcours.html#' + slug(c.name) + '" data-img="' + esc(c.image_url || S.images.aerial) + '">' +
+          '<span class="crow__holes">' + c.holes + '</span>' +
+          '<img class="crow__thumb" src="' + esc(c.image_url || S.images.aerial) + '" alt="" loading="lazy">' +
+          '<span class="crow__name">' + esc(c.name) + '<small>' + c.holes + ' trous' + (c.level ? ', ' + esc(c.level).toLowerCase() : '') + '</small></span>' +
+          '<span class="crow__meta">' + esc(meta) + '</span>' +
+          '<span class="crow__go" aria-hidden="true">' + ICON.arrow + '</span></a>';
       }).join('');
       return;
     }
@@ -657,7 +660,8 @@
     },
     accueil2: function () {
       return Promise.all([
-        q('marcilly_courses', function (b) { return b.order('sort'); }).then(function (l) { renderCourses(l, $('#deck-list'), 'deck'); if (window.MarcillyDeck) window.MarcillyDeck(); }),
+        q('marcilly_courses', function (b) { return b.order('sort'); }).then(function (l) { renderCourses(l, $('#course-list'), 'list'); if (window.MarcillyCourseList) window.MarcillyCourseList(); }),
+        q('marcilly_events', function (b) { return b.gte('date', todayISO()).order('date').limit(1); }).then(function (r) { if (window.MarcillyNextInfo) window.MarcillyNextInfo(r[0]); }),
         renderNextEvents($('#next-events'), $('#countdown')),
         renderPosts($('#home-posts'), 3),
         q('marcilly_partners', function (b) { return b.order('sort'); }).then(renderPartners)

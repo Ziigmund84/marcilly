@@ -13,9 +13,9 @@
   linear-gradient(90deg, rgba(21,37,58,.9) 0%, rgba(21,37,58,.62) 45%, rgba(21,37,58,.38) 100%); }
 @media (max-width: 700px) { .plain__veil { background: linear-gradient(0deg, rgba(14,26,41,.85) 0%, rgba(21,37,58,.55) 55%, rgba(21,37,58,.45) 100%); } }
 .plain__dark { position: absolute; inset: 0; background: var(--navy-ink); opacity: 0; pointer-events: none; }
-.plain__word { position: absolute; right: -2vw; bottom: 26vh; font-size: clamp(5rem, 17vw, 16rem); font-weight: 900; font-variation-settings: 'wdth' 125; line-height: .8; letter-spacing: -.05em;
+.plain__word { position: absolute; right: -2vw; top: calc(var(--header-h) + 7vh); font-size: clamp(5rem, 17vw, 16rem); font-weight: 900; font-variation-settings: 'wdth' 125; line-height: .8; letter-spacing: -.05em;
   color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.16); white-space: nowrap; pointer-events: none; user-select: none; }
-@media (max-width: 700px) { .plain__word { bottom: auto; top: 18vh; font-size: 22vw; } }
+@media (max-width: 700px) { .plain__word { top: calc(var(--header-h) + 9vh); font-size: 24vw; } }
 /* état de départ de l'entrée (retiré si les animations sont désactivées) */
 .plain.is-pre .plain__win { clip-path: inset(30% 34% 30% 34% round 22px); }
 .plain.is-pre .plain__veil, .plain.is-pre .plain__word, .plain.is-pre .plain__content { opacity: 0; }

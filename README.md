@@ -9,7 +9,7 @@ Site multipage du Golf de Marcilly (Marcilly-en-Villette, Loiret), hébergé sur
 
 | Page | Fichier | Contenu |
 |---|---|---|
-| Accueil | `index.html` | Titre animé, accès rapides, météo, chiffres clés, parcours, prochaines compétitions, actualités, restaurant, partenaires |
+| Accueil | `index.html` | Photo plein cadre avec infos du jour (ouverture, météo, prochaine compétition), phrase d'accueil, liste des parcours, grande photo, famille, compétitions, actualités, restaurant, partenaires |
 | Parcours | `parcours.html` | Les 4 parcours (45 trous), entraînement, météo, galerie |
 | Tarifs | `tarifs.html` | Découverte, green fees, practice, location, abonnements |
 | Enseignement | `enseignement.html` | École de golf, Label Sportif, cours adultes, pros, Académie |
@@ -37,7 +37,7 @@ select id from auth.users where email = 'adresse@exemple.fr';
 ## Technique
 
 - HTML/CSS/JS statique, sans étape de build.
-- Animations : GSAP + ScrollTrigger + MotionPath, défilement fluide Lenis. Respecte « réduire les animations ».
+- Animations : GSAP + ScrollTrigger, défilement fluide Lenis (accueil : `assets/js/home2.js` et `assets/css/home2.css`). Respecte « réduire les animations ».
 - Données : Supabase, projet `harmonie-olivet`, tables préfixées `marcilly_`, bucket de stockage `marcilly-media`.
   Lecture publique, écriture réservée aux administrateurs (RLS). Les formulaires publics peuvent seulement *ajouter* un message.
 - Météo : Open-Meteo (sans clé).

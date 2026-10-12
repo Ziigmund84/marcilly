@@ -154,7 +154,7 @@
     function onScroll() {
       var y = window.scrollY;
       if (!header) return;
-      var over = heroEl ? heroEl.getBoundingClientRect().bottom > header.offsetHeight : false;
+      var over = heroEl ? heroEl.getBoundingClientRect().top > -60 : false;
       header.classList.toggle('is-scrolled', !over && y > 10);
       if (heroEl) header.classList.toggle('is-over-hero', over);
       header.classList.toggle('is-hidden', y > lastY + 2 && y > 400 && !over && !document.body.classList.contains('menu-open'));
@@ -471,9 +471,9 @@
       var portrait = window.innerWidth / window.innerHeight < .9;
       var W = portrait ? 900 : 1600, H = portrait ? 1600 : 900;
       var lines = portrait ? ['MAR', 'CILLY'] : ['MARCILLY'];
-      var fs = portrait ? 330 : 300, gap = portrait ? 300 : 0;
+      var fs = portrait ? 300 : 300, gap = portrait ? 290 : 0;
       svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
       var y0 = H / 2 - (lines.length - 1) * gap / 2 + fs * .36;
       var texts = lines.map(function (l, i) {
         return '<text x="' + W / 2 + '" y="' + (y0 + i * gap) + '" text-anchor="middle" font-size="' + fs + '" fill="#000" ' + (portrait ? '' : 'textLength="' + (W * .9) + '" lengthAdjust="spacingAndGlyphs"') + '>' + l + '</text>';

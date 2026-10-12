@@ -501,8 +501,15 @@
       for (var b = 0; b < H; b++) { push(b * W); push(b * W + W - 1); }
       while (sp) { var k = stack[--sp], kx = k % W;
         if (kx > 0) push(k - 1); if (kx < W - 1) push(k + 1); if (k >= W) push(k - W); if (k < n - W) push(k + W); }
+      // bords adoucis : flou en boîte sur l'alpha (deux passes), pour un contour lisse pendant le zoom
+      var al = new Float32Array(n), tmp = new Float32Array(n);
+      for (var j = 0; j < n; j++) al[j] = out[j] ? 0 : 255;
+      for (var pass = 0; pass < 2; pass++) {
+        for (yy = 0; yy < H; yy++) { var row = yy * W; for (xx = 0; xx < W; xx++) { var acc = 0, c2 = 0; for (dx = -2; dx <= 2; dx++) { nx = xx + dx; if (nx >= 0 && nx < W) { acc += al[row + nx]; c2++; } } tmp[row + xx] = acc / c2; } }
+        for (yy = 0; yy < H; yy++) for (xx = 0; xx < W; xx++) { acc = 0; c2 = 0; for (dy = -2; dy <= 2; dy++) { ny = yy + dy; if (ny >= 0 && ny < H) { acc += tmp[ny * W + xx]; c2++; } } al[yy * W + xx] = acc / c2; }
+      }
       var sil = x.createImageData(W, H), sd = sil.data;
-      for (var j = 0; j < n; j++) if (!out[j]) { sd[j * 4 + 3] = 255; }
+      for (j = 0; j < n; j++) sd[j * 4 + 3] = al[j];
       var sc = document.createElement('canvas'); sc.width = W; sc.height = H; sc.getContext('2d').putImageData(sil, 0, 0);
       // point le plus « intérieur » de la silhouette (carte de distances grossière) : origine du zoom
       var step = 6, gw = Math.ceil(W / step), gh = Math.ceil(H / step), dist = new Float32Array(gw * gh), best = 0, bx = W / 2, by = H / 2;

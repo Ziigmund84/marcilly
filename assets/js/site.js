@@ -146,20 +146,26 @@
     if (close) close.addEventListener('click', function () {
       $('#announce').hidden = true; document.body.classList.remove('has-announce');
       document.documentElement.style.setProperty('--announce-h', '0px');
+      window.dispatchEvent(new Event('scroll'));
       try { sessionStorage.setItem('mc-announce', S.announcement.text || ''); } catch (e) {}
     });
     var heroEl = $('.hero, .page-hero');
     if (heroEl && header) header.classList.add('is-over-hero', 'is-fixed');
-    var lastY = 0;
+    var ticking = false;
     function onScroll() {
-      var y = window.scrollY;
-      if (!header) return;
-      var over = heroEl ? heroEl.getBoundingClientRect().top > -60 : false;
-      header.classList.toggle('is-scrolled', !over && y > 10);
-      if (heroEl) header.classList.toggle('is-over-hero', over);
-      header.classList.toggle('is-hidden', y > lastY + 2 && y > 400 && !over && !document.body.classList.contains('menu-open'));
-      if (y < lastY - 2) header.classList.remove('is-hidden');
-      lastY = y;
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        var y = window.scrollY;
+        if (!header) return;
+        var over = heroEl ? heroEl.getBoundingClientRect().top > -60 : false;
+        header.classList.toggle('is-scrolled', !over && y > 10);
+        if (heroEl) {
+          header.classList.toggle('is-over-hero', over);
+          var a = $('#announce'), ah = a && !a.hidden ? a.offsetHeight : 0;
+          header.style.transform = 'translate3d(0,' + Math.max(0, ah - y) + 'px,0)';
+        }
+      });
     }
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
   }
@@ -423,6 +429,7 @@
   function initMotion() {
     if (!HAS_GSAP) { $$('[data-split]').forEach(function (h) { h.dataset.splitDone = '1'; }); return; }
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
     if (window.MotionPathPlugin) gsap.registerPlugin(MotionPathPlugin);
     if (window.Lenis) {
       var lenis = new Lenis({ lerp: .11, smoothWheel: true });
@@ -441,8 +448,8 @@
     $$('.reveal-img', root).forEach(function (el) {
       if (el.dataset.revealed) return; el.dataset.revealed = 1;
       var img = $('img', el);
-      gsap.fromTo(el, { clipPath: 'inset(18% 10% 18% 10% round 28px)' }, { clipPath: 'inset(0% 0% 0% 0% round 28px)', ease: 'power3.out', duration: 1.4, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-      if (img) gsap.fromTo(img, { scale: 1.25 }, { scale: 1, ease: 'power3.out', duration: 1.8, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+      gsap.fromTo(el, { y: 50, opacity: 0 }, { y: 0, opacity: 1, ease: 'power3.out', duration: 1.1, scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+      if (img) gsap.fromTo(img, { scale: 1.18 }, { scale: 1, ease: 'power3.out', duration: 1.6, scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
     });
     $$('[data-stagger]', root).forEach(function (el) {
       if (el.dataset.staggered) return; el.dataset.staggered = 1;
@@ -463,42 +470,73 @@
     }
   }
 
-  /* --- Accueil : titre MARCILLY en masque qui s'ouvre sur la vue aérienne --- */
+  /* --- Accueil : titre MARCILLY découpé dans un voile marine (canvas) qui s'ouvre sur la vue aérienne.
+         Le canvas est redessiné net à chaque image, à la résolution de l'écran : pas de flou ni de saccade. --- */
   function heroMask() {
     var hero = $('#hero'); if (!hero) return;
-    var svg = $('.hero__mask', hero), img = $('.hero__photo img', hero);
-    function build() {
-      var portrait = window.innerWidth / window.innerHeight < .9;
-      var W = portrait ? 900 : 1600, H = portrait ? 1600 : 900;
+    var cv = $('.hero__mask', hero), img = $('.hero__photo img', hero);
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d');
+    var st = { s: 1, y: 60, a: 0 }, G = null, dirty = true, lastW = 0;
+    function layout() {
+      var w = hero.clientWidth, h = hero.clientHeight;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      cv.style.width = w + 'px'; cv.style.height = h + 'px';
+      var portrait = w / h < .9;
       var lines = portrait ? ['MAR', 'CILLY'] : ['MARCILLY'];
-      var fs = portrait ? 245 : 300, gap = portrait ? 245 : 0;
-      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      var y0 = H / 2 - (lines.length - 1) * gap / 2 + fs * .36;
-      var texts = lines.map(function (l, i) {
-        return '<text x="' + W / 2 + '" y="' + (y0 + i * gap) + '" text-anchor="middle" font-size="' + fs + '" fill="#000" ' + (portrait ? '' : 'textLength="' + (W * .9) + '" lengthAdjust="spacingAndGlyphs"') + '>' + l + '</text>';
-      }).join('');
-      svg.innerHTML = '<defs><mask id="hm" maskUnits="userSpaceOnUse" x="-20000" y="-20000" width="40000" height="40000"><rect x="-20000" y="-20000" width="40000" height="40000" fill="#fff"/><g id="hm-g">' + texts + '</g></mask></defs><rect x="-20000" y="-20000" width="40000" height="40000" fill="#0E1A29" mask="url(#hm)"/>';
-      // point d'origine du zoom : au cœur du premier « I »
-      var tEls = $$('text', svg), target = portrait ? tEls[1] : tEls[0], idx = portrait ? 1 : 4, cx = W / 2, cy = H / 2;
-      try { var r = target.getExtentOfChar(idx); cx = r.x + r.width / 2; cy = r.y + r.height * .55; } catch (e) {}
-      return { cx: cx, cy: cy };
+      function setFont(fs) { ctx.font = '900 ' + fs + 'px Archivo, system-ui, sans-serif'; try { ctx.fontStretch = 'expanded'; } catch (e) {} }
+      var fs = 100; setFont(fs);
+      var widest = Math.max.apply(null, lines.map(function (l) { return ctx.measureText(l).width; }));
+      fs = Math.min(100 * (w * (portrait ? .86 : .9)) / widest, h * (portrait ? .2 : .36));
+      setFont(fs);
+      var gap = fs * 1.02, cy = h * .48;
+      var y0 = cy - (lines.length - 1) * gap / 2 + fs * .36;
+      // origine du zoom : au cœur du premier « I »
+      var li = portrait ? 1 : 0, line = lines[li], lw = ctx.measureText(line).width, x0 = w / 2 - lw / 2;
+      var i = line.indexOf('I');
+      var ox = x0 + (ctx.measureText(line.slice(0, i)).width + ctx.measureText(line.slice(0, i + 1)).width) / 2;
+      var oy = y0 + li * gap - fs * .36;
+      G = { w: w, h: h, dpr: dpr, fs: fs, lines: lines, gap: gap, y0: y0, ox: ox, oy: oy, font: ctx.font };
+      dirty = true; render();
     }
-    var o = build();
-    if (!HAS_GSAP) return;
+    function render() {
+      if (!G || !dirty) return; dirty = false;
+      var d = G.dpr, sc = st.s;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      if (sc > 60) return; // le voile a disparu
+      ctx.fillStyle = '#0E1A29'; ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = st.a;
+      ctx.setTransform(d * sc, 0, 0, d * sc, d * G.ox * (1 - sc), d * (G.oy * (1 - sc) + st.y));
+      ctx.font = G.font; try { ctx.fontStretch = 'expanded'; } catch (e) {}
+      ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+      G.lines.forEach(function (l, k) { ctx.fillText(l, G.w / 2, G.y0 + k * G.gap); });
+    }
+    function mark() { dirty = true; }
+    layout();
+    if (!HAS_GSAP) { st.y = 0; st.a = 1; dirty = true; render(); return; }
+    gsap.ticker.add(render);
     var tl = gsap.timeline({
-      scrollTrigger: { trigger: hero, start: 'top top', end: '+=160%', pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true }
+      scrollTrigger: { trigger: hero, start: 'top top', end: '+=150%', pin: true, scrub: .6, anticipatePin: 1 }
     });
     tl.to('.hero__intro, .hero__cue, .hero__mascot', { opacity: 0, y: -30, duration: .15 }, 0)
-      .fromTo('#hm-g', { scale: 1, svgOrigin: o.cx + ' ' + o.cy }, { scale: 90, svgOrigin: o.cx + ' ' + o.cy, ease: 'power2.in', duration: .7 }, 0)
-      .fromTo(img, { scale: 1.35 }, { scale: 1, ease: 'power1.out', duration: 1 }, 0)
-      .to('.hero__mask', { opacity: 0, duration: .05 }, .66)
+      .to(st, { s: 70, ease: 'power3.in', duration: .7, onUpdate: mark }, 0)
+      .fromTo(img, { scale: 1.3 }, { scale: 1, ease: 'power1.out', duration: 1 }, 0)
+      .set(cv, { autoAlpha: 0 }, .7)
       .to('.hero__shade', { opacity: 1, duration: .25 }, .6)
       .fromTo('.hero__content', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: .3, ease: 'power2.out' }, .7);
     // entrée au chargement
-    gsap.from('#hm-g text', { opacity: 0, y: 80, duration: 1.4, ease: 'expo.out', stagger: .12, delay: .2 });
+    gsap.to(st, { y: 0, a: 1, duration: 1.4, ease: 'expo.out', delay: .15, onUpdate: mark });
     gsap.from('.hero__intro', { opacity: 0, y: 20, duration: 1, delay: .7 });
-    window.addEventListener('resize', debounce(function () { var n = build(); tl.invalidate(); gsap.set('#hm-g', { svgOrigin: n.cx + ' ' + n.cy }); ScrollTrigger.refresh(); }, 250));
+    lastW = window.innerWidth;
+    window.addEventListener('resize', debounce(function () {
+      // sur mobile, la barre d'adresse change la hauteur : on ne recalcule que si la largeur change
+      if (Math.abs(window.innerWidth - lastW) < 2 && G) { var h = hero.clientHeight; if (Math.abs(h - G.h) < 160) return; }
+      lastW = window.innerWidth; layout();
+    }, 200));
   }
   function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
 

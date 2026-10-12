@@ -11,7 +11,7 @@
 .plain__dark { position: absolute; inset: 0; background: var(--navy-ink); opacity: 0; pointer-events: none; }
 .plain__content { position: relative; z-index: 1; padding: var(--header-h) var(--gutter) 0; max-width: 900px; }
 .plain__place { font-size: .95rem; font-weight: 500; letter-spacing: .02em; color: rgba(255,255,255,.78); margin: 0 auto 1.4rem; max-width: none; }
-.plain h1 { font-size: clamp(2.8rem, 1.4rem + 5.4vw, 6.4rem); font-weight: 800; font-variation-settings: 'wdth' 112; letter-spacing: -.025em; line-height: 1; margin: 0 auto; max-width: none; }
+.plain h1 { font-size: clamp(2.6rem, 1.4rem + 4.6vw, 5.6rem); font-weight: 400; letter-spacing: -.025em; line-height: 1; margin: 0 auto; max-width: none; }
 .plain__lead p { font-size: clamp(1.05rem, 1rem + .4vw, 1.3rem); color: rgba(255,255,255,.85); margin: 1.4rem auto 0; max-width: 40ch; }
 .plain__cta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem 2rem; margin-top: 2.4rem; }
 .plain__link { color: #fff; text-decoration: none; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,.5); padding-bottom: 2px; transition: border-color .3s; }
@@ -37,7 +37,7 @@
 
 /* ---------- Phrase d'accueil ---------- */
 .statement { padding-block: clamp(5rem, 12vw, 10rem); }
-.statement__text { font-size: clamp(1.8rem, 1rem + 3.2vw, 4rem); font-weight: 800; font-variation-settings: 'wdth' 112; line-height: 1.12; letter-spacing: -.02em; max-width: 22ch; margin: 0; color: var(--navy-deep); }
+.statement__text { font-size: clamp(1.7rem, 1rem + 2.6vw, 3.4rem); font-weight: 400; line-height: 1.12; letter-spacing: -.02em; max-width: 22ch; margin: 0; color: var(--navy-deep); }
 .statement__text .wd { opacity: .16; }
 .no-motion .statement__text .wd { opacity: 1; }
 .statement__foot { display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; align-items: end; justify-content: space-between; margin-top: clamp(2.5rem, 5vw, 4rem); }
@@ -46,9 +46,9 @@
 /* ---------- Parcours en liste ---------- */
 .clist { border-top: 2px solid var(--navy-deep); }
 .crow { display: grid; grid-template-columns: 5.5rem 1fr auto auto; gap: 1rem 2rem; align-items: center; padding: 1.6rem 0; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); position: relative; }
-.crow__holes { font-size: clamp(2.2rem, 1.5rem + 2vw, 3.4rem); font-weight: 900; font-variation-settings: 'wdth' 125; line-height: 1; color: var(--green); letter-spacing: -.04em; }
-.crow__name { font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 800; font-variation-settings: 'wdth' 118; line-height: 1.05; letter-spacing: -.02em; transition: transform .45s var(--ease), color .3s; }
-.crow__name small { display: block; font-size: .95rem; font-weight: 500; font-variation-settings: 'wdth' 100; color: var(--muted); letter-spacing: 0; margin-top: .35rem; }
+.crow__holes { font-size: clamp(2.2rem, 1.5rem + 2vw, 3.4rem); font-weight: 500; line-height: 1; color: var(--green); letter-spacing: -.015em; }
+.crow__name { font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 500; line-height: 1.05; letter-spacing: -.02em; transition: transform .45s var(--ease), color .3s; }
+.crow__name small { display: block; font-size: .95rem; font-weight: 500; color: var(--muted); letter-spacing: 0; margin-top: .35rem; }
 .crow__meta { color: var(--muted); font-size: .95rem; text-align: right; white-space: nowrap; }
 .crow__go { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--navy-deep); display: grid; place-items: center; transition: background .3s, color .3s; }
 .crow__go svg { width: 18px; height: 18px; }
@@ -74,4 +74,4 @@
 .band__frame img { width: 100%; height: 100%; object-fit: cover; }
 .band__frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,26,41,0) 50%, rgba(14,26,41,.7)); }
 .band__cap { position: absolute; left: clamp(1rem, 4vw, 3rem); bottom: clamp(1rem, 4vw, 2.5rem); color: #fff; max-width: 34ch; z-index: 1; }
-.band__cap strong { display: block; font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 800; font-variation-settings: 'wdth' 115; line-height: 1.1; margin-bottom: .5rem; }
+.band__cap strong { display: block; font-size: clamp(1.4rem, 1rem + 1.6vw, 2.4rem); font-weight: 500; line-height: 1.1; margin-bottom: .5rem; }

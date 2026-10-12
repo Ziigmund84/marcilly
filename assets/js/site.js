@@ -470,34 +470,62 @@
     }
   }
 
-  /* --- Accueil : titre MARCILLY découpé dans un voile marine (canvas) qui s'ouvre sur la vue aérienne.
-         Le canvas est redessiné net à chaque image, à la résolution de l'écran : pas de flou ni de saccade. --- */
+  /* --- Accueil : la silhouette du logo (le golfeur-oiseau) découpée dans un voile marine, qui s'ouvre
+         sur la vue aérienne au défilement. Dessin en canvas à la résolution de l'écran. --- */
   function heroMask() {
     var hero = $('#hero'); if (!hero) return;
     var cv = $('.hero__mask', hero), img = $('.hero__photo img', hero);
     if (!cv || !cv.getContext) return;
     var ctx = cv.getContext('2d');
-    var st = { s: 1, y: 60, a: 0 }, G = null, dirty = true, lastW = 0;
+    var st = { s: 1, y: 50, a: 0 }, G = null, L = null, dirty = true, lastW = 0;
+
+    // Prépare la silhouette pleine du logo : traits épaissis puis remplissage de tout ce qui n'est pas « dehors »
+    function buildSilhouette(im) {
+      var H = 1100, W = Math.round(im.naturalWidth * H / im.naturalHeight);
+      var c = document.createElement('canvas'); c.width = W; c.height = H;
+      var x = c.getContext('2d'); x.drawImage(im, 0, 0, W, H);
+      var px = x.getImageData(0, 0, W, H).data, n = W * H;
+      var ink = new Uint8Array(n);
+      for (var i = 0; i < n; i++) ink[i] = px[i * 4 + 3] > 70 ? 1 : 0;
+      // épaissir de 3 px pour fermer les petites ouvertures du dessin
+      var R = 3, thick = new Uint8Array(n);
+      for (var yy = 0; yy < H; yy++) for (var xx = 0; xx < W; xx++) {
+        if (!ink[yy * W + xx]) continue;
+        for (var dy = -R; dy <= R; dy++) { var ny = yy + dy; if (ny < 0 || ny >= H) continue;
+          for (var dx = -R; dx <= R; dx++) { var nx = xx + dx; if (nx >= 0 && nx < W) thick[ny * W + nx] = 1; } }
+      }
+      // remplissage de l'extérieur depuis les bords
+      var out = new Uint8Array(n), stack = new Int32Array(n), sp = 0;
+      function push(k) { if (!out[k] && !thick[k]) { out[k] = 1; stack[sp++] = k; } }
+      for (var a = 0; a < W; a++) { push(a); push((H - 1) * W + a); }
+      for (var b = 0; b < H; b++) { push(b * W); push(b * W + W - 1); }
+      while (sp) { var k = stack[--sp], kx = k % W;
+        if (kx > 0) push(k - 1); if (kx < W - 1) push(k + 1); if (k >= W) push(k - W); if (k < n - W) push(k + W); }
+      var sil = x.createImageData(W, H), sd = sil.data;
+      for (var j = 0; j < n; j++) if (!out[j]) { sd[j * 4 + 3] = 255; }
+      var sc = document.createElement('canvas'); sc.width = W; sc.height = H; sc.getContext('2d').putImageData(sil, 0, 0);
+      // point le plus « intérieur » de la silhouette (carte de distances grossière) : origine du zoom
+      var step = 6, gw = Math.ceil(W / step), gh = Math.ceil(H / step), dist = new Float32Array(gw * gh), best = 0, bx = W / 2, by = H / 2;
+      for (var gy = 0; gy < gh; gy++) for (var gx = 0; gx < gw; gx++) dist[gy * gw + gx] = out[Math.min(H - 1, gy * step) * W + Math.min(W - 1, gx * step)] ? 0 : 1e6;
+      for (gy = 0; gy < gh; gy++) for (gx = 0; gx < gw; gx++) { var id = gy * gw + gx; if (!dist[id]) continue;
+        var m = dist[id]; if (gx > 0) m = Math.min(m, dist[id - 1] + 1); if (gy > 0) m = Math.min(m, dist[id - gw] + 1); dist[id] = m; }
+      for (gy = gh - 1; gy >= 0; gy--) for (gx = gw - 1; gx >= 0; gx--) { id = gy * gw + gx; if (!dist[id]) continue;
+        m = dist[id]; if (gx < gw - 1) m = Math.min(m, dist[id + 1] + 1); if (gy < gh - 1) m = Math.min(m, dist[id + gw] + 1); dist[id] = m;
+        if (m > best) { best = m; bx = gx * step; by = gy * step; } }
+      return { sil: sc, art: im, W: W, H: H, ox: bx / W, oy: by / H };
+    }
+
     function layout() {
       var w = hero.clientWidth, h = hero.clientHeight;
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
       cv.style.width = w + 'px'; cv.style.height = h + 'px';
-      var portrait = w / h < .9;
-      var lines = portrait ? ['MAR', 'CILLY'] : ['MARCILLY'];
-      function setFont(fs) { ctx.font = '900 ' + fs + 'px Archivo, system-ui, sans-serif'; try { ctx.fontStretch = 'expanded'; } catch (e) {} }
-      var fs = 100; setFont(fs);
-      var widest = Math.max.apply(null, lines.map(function (l) { return ctx.measureText(l).width; }));
-      fs = Math.min(100 * (w * (portrait ? .86 : .9)) / widest, h * (portrait ? .2 : .36));
-      setFont(fs);
-      var gap = fs * 1.02, cy = h * .48;
-      var y0 = cy - (lines.length - 1) * gap / 2 + fs * .36;
-      // origine du zoom : au cœur du premier « I »
-      var li = portrait ? 1 : 0, line = lines[li], lw = ctx.measureText(line).width, x0 = w / 2 - lw / 2;
-      var i = line.indexOf('I');
-      var ox = x0 + (ctx.measureText(line.slice(0, i)).width + ctx.measureText(line.slice(0, i + 1)).width) / 2;
-      var oy = y0 + li * gap - fs * .36;
-      G = { w: w, h: h, dpr: dpr, fs: fs, lines: lines, gap: gap, y0: y0, ox: ox, oy: oy, font: ctx.font };
+      G = { w: w, h: h, dpr: dpr };
+      if (L) {
+        var ratio = L.W / L.H, bh = Math.min(h * .66, (w * .82) / ratio), bw = bh * ratio;
+        G.bx = w / 2 - bw / 2; G.by = h * .45 - bh / 2; G.bw = bw; G.bh = bh;
+        G.ox = G.bx + L.ox * bw; G.oy = G.by + L.oy * bh;
+      }
       dirty = true; render();
     }
     function render() {
@@ -508,32 +536,43 @@
       ctx.clearRect(0, 0, cv.width, cv.height);
       if (sc > 60) return; // le voile a disparu
       ctx.fillStyle = '#0E1A29'; ctx.fillRect(0, 0, cv.width, cv.height);
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.globalAlpha = st.a;
+      if (!L || G.bw == null) return;
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
       ctx.setTransform(d * sc, 0, 0, d * sc, d * G.ox * (1 - sc), d * (G.oy * (1 - sc) + st.y));
-      ctx.font = G.font; try { ctx.fontStretch = 'expanded'; } catch (e) {}
-      ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-      G.lines.forEach(function (l, k) { ctx.fillText(l, G.w / 2, G.y0 + k * G.gap); });
+      // trou en forme de silhouette : la photo apparaît dedans
+      ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = st.a;
+      ctx.drawImage(L.sil, G.bx, G.by, G.bw, G.bh);
+      // les traits du logo par-dessus, qui s'effacent pendant le zoom
+      var la = st.a * Math.max(0, 1 - (sc - 1) / 2.5);
+      if (la > .01) { ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = la; ctx.drawImage(L.art, G.bx, G.by, G.bw, G.bh); }
     }
     function mark() { dirty = true; }
     layout();
-    if (!HAS_GSAP) { st.y = 0; st.a = 1; dirty = true; render(); return; }
+
+    var logo = new Image(); logo.crossOrigin = 'anonymous';
+    logo.onload = function () {
+      try { L = buildSilhouette(logo); } catch (e) { console.warn('Silhouette du logo indisponible', e); return; }
+      layout();
+      if (HAS_GSAP) gsap.to(st, { y: 0, a: 1, duration: 1.4, ease: 'expo.out', onUpdate: mark });
+      else { st.y = 0; st.a = 1; mark(); render(); }
+    };
+    logo.src = (S.images && S.images.logo_navy) || CFG.defaults.images.logo_navy;
+
+    if (!HAS_GSAP) return;
     gsap.ticker.add(render);
     var tl = gsap.timeline({
       scrollTrigger: { trigger: hero, start: 'top top', end: '+=150%', pin: true, scrub: .6, anticipatePin: 1 }
     });
-    tl.to('.hero__intro, .hero__cue, .hero__mascot', { opacity: 0, y: -30, duration: .15 }, 0)
-      .to(st, { s: 70, ease: 'power3.in', duration: .7, onUpdate: mark }, 0)
+    tl.to('.hero__intro, .hero__cue', { opacity: 0, y: -30, duration: .15 }, 0)
+      .to(st, { s: 45, ease: 'power3.in', duration: .7, onUpdate: mark }, 0)
       .fromTo(img, { scale: 1.3 }, { scale: 1, ease: 'power1.out', duration: 1 }, 0)
       .set(cv, { autoAlpha: 0 }, .7)
       .to('.hero__shade', { opacity: 1, duration: .25 }, .6)
       .fromTo('.hero__content', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: .3, ease: 'power2.out' }, .7);
-    // entrée au chargement
-    gsap.to(st, { y: 0, a: 1, duration: 1.4, ease: 'expo.out', delay: .15, onUpdate: mark });
     gsap.from('.hero__intro', { opacity: 0, y: 20, duration: 1, delay: .7 });
     lastW = window.innerWidth;
     window.addEventListener('resize', debounce(function () {
-      // sur mobile, la barre d'adresse change la hauteur : on ne recalcule que si la largeur change
+      // sur mobile, la barre d'adresse change la hauteur : on ne recalcule que si la largeur change vraiment
       if (Math.abs(window.innerWidth - lastW) < 2 && G) { var h = hero.clientHeight; if (Math.abs(h - G.h) < 160) return; }
       lastW = window.innerWidth; layout();
     }, 200));

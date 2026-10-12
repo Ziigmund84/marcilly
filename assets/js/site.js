@@ -471,7 +471,7 @@
       var portrait = window.innerWidth / window.innerHeight < .9;
       var W = portrait ? 900 : 1600, H = portrait ? 1600 : 900;
       var lines = portrait ? ['MAR', 'CILLY'] : ['MARCILLY'];
-      var fs = portrait ? 300 : 300, gap = portrait ? 290 : 0;
+      var fs = portrait ? 245 : 300, gap = portrait ? 245 : 0;
       svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
       svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
       var y0 = H / 2 - (lines.length - 1) * gap / 2 + fs * .36;

@@ -113,7 +113,7 @@
   function applySettings(root) {
     root = root || document;
     $$('[data-set]', root).forEach(function (el) { var v = get(S, el.dataset.set); if (v != null && v !== '') el.textContent = v; });
-    $$('[data-set-href]', root).forEach(function (el) { var v = get(S, el.dataset.setHref); if (v) el.setAttribute('href', safeUrl(v)); else if (el.id === 'newsletter-btn') el.closest('p').hidden = true; });
+    $$('[data-set-href]', root).forEach(function (el) { var v = get(S, el.dataset.setHref); if (v) el.setAttribute('href', safeUrl(v)); if (el.id === 'newsletter-btn') el.closest('p').hidden = !v; });
     $$('[data-set-tel]', root).forEach(function (el) { var v = get(S, el.dataset.setTel); if (v) el.setAttribute('href', telHref(v)); });
     $$('[data-set-mail]', root).forEach(function (el) { var v = get(S, el.dataset.setMail); if (v) el.setAttribute('href', 'mailto:' + v); });
     $$('[data-set-src]', root).forEach(function (el) { var v = get(S, el.dataset.setSrc); if (v) el.setAttribute('src', v); });
@@ -123,7 +123,7 @@
     if (a) {
       var dismissed = false; try { dismissed = sessionStorage.getItem('mc-announce') === (S.announcement.text || ''); } catch (e) {}
       a.hidden = !(S.announcement && S.announcement.enabled && S.announcement.text) || dismissed;
-      var link = $('a', a); if (link && !S.announcement.link) link.hidden = true;
+      var link = $('a', a); if (link) link.hidden = !S.announcement.link;
       document.body.classList.toggle('has-announce', !a.hidden);
       document.documentElement.style.setProperty('--announce-h', a.hidden ? '0px' : a.offsetHeight + 'px');
     }

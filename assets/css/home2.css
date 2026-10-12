@@ -73,3 +73,4 @@
 /* filet de sécurité : si le script ne démarre pas, tout s'affiche au bout de 4 s */
 @keyframes plain-safe { to { opacity: 1; clip-path: inset(0 0 0 0 round 0); } }
 .plain.is-pre .plain__win, .plain.is-pre .plain__veil, .plain.is-pre .plain__word, .plain.is-pre .plain__content { animation: plain-safe .6s 4s forwards; }
+@media (max-height: 760px) { .plain__word { display: none; } }
